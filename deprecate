@@ -4,7 +4,7 @@ import os
 import sys
 
 def git(*args):
-  return subprocess.check_output(['git'] + list(args))
+  return subprocess.Popen(['git']+list(args), stdout=subprocess.PIPE).communicate()[0]
 
 if os.path.isfile(".deprecate") :
   dep = open('.deprecate', 'r')
@@ -37,14 +37,17 @@ if os.path.isfile(".deprecate") :
       if change == file :
         warnings.append(change)
 
-  print '\033[91m' + 'The following files are deprecated:' + '\033[0m'
+
 
   warningMessage = "";
 
   if len(warnings) > 0 :
     for warning in warnings :
       warningMessage += warning + '\n'
+  else :
+    sys.exit(0)
 
+  print '\033[91m' + 'The following files are deprecated:' + '\033[0m'
   print '\033[93m' + warningMessage + '\033[0m'
 
   sys.stdin = open('/dev/tty')
