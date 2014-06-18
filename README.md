@@ -8,22 +8,21 @@ This script is meant to be used as a git pre-commit hook to warn developers of d
 
 ### Try it out
 
-1. Create a new dir somewhere and initialize a git repo.
+  * Create a new dir somewhere and initialize a git repo.
 
-2. Add some files and directories for testing purposes.
+  * Add some files and directories for testing purposes.
 
-3. Create a file named ".deprecate" in the root of the repository.
+  * Create a file named ".deprecate" in the root of the repository.
 
-  - Add file names like so **"f: path/from/root/to/filename.exp"**
+   - Add file names like so **"f: path/from/root/to/filename.exp"**
 
+   - Add directories like so **"d: path/to/dir"**
 
-  - Add directories like so **"d: path/to/dir"**
+  * Copy the executable into your **.git/hooks** dir and rename it **"pre-commit"**
 
-4. Copy the executable into your **.git/hooks** dir and rename it **"pre-commit"**
+  * Use git add to add some deprecated files to your staging area. Try to commit
 
-5. Use git add to add some deprecated files to your staging area. Try to commit
-
-6. Try unstaging those files and use git add to add files or directories not on the list and try to commit.
+  * Try unstaging those files and use git add to add files or directories not on the list and try to commit.
 
 ### Improvements: 
 I'd like to work on creating a deprecate command that you can run within a directory to add files or directories to the .deprecate file's list.
