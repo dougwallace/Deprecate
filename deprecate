@@ -47,9 +47,11 @@ if os.path.isfile(".deprecate") :
 
   print '\033[93m' + warningMessage + '\033[0m'
 
+  sys.stdin = open('/dev/tty')
   accept = raw_input('You are about to commit changes to deprecated files. \nDo you wish to continue? (y/n) ')
 
-  if accept == 'y' :
+  if accept.strip().lower().startswith('y') :
     sys.exit(0)
   else :
+    print '\033[93m' + 'Commit has been aborted.' + '\033[0m'
     sys.exit(1)
