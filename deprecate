@@ -6,15 +6,16 @@ import sys
 def git(*args):
   return subprocess.Popen(['git']+list(args), stdout=subprocess.PIPE).communicate()[0]
 
+#check for .deprecate file in the current directory, usually the root of the repository
 if os.path.isfile(".deprecate") :
   dep = open('.deprecate', 'r')
-  #print dep.read()
 
   #initiate lists to be used later
   directories = list()
   files = list()
   warnings = list()
 
+  #iterate through the lines in the file to create lists for directories and files
   for line in dep :
     if line[:3] == 'd: ' :
       line = line.rstrip('\n').replace(line[:3], '')
@@ -25,6 +26,7 @@ if os.path.isfile(".deprecate") :
 
   dep.close()
 
+  #get the output of "git diff --staged --name-only"
   out = git('diff', '--staged', '--name-only').rstrip('\n')
 
   changes = out.split('\n')
