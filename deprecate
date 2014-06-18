@@ -19,10 +19,10 @@ if os.path.isfile(".deprecate") :
   for line in dep :
     if line[:3] == 'd: ' :
       line = line.rstrip('\n').replace(line[:3], '')
-      directories.append(line.rstrip('\n'))
+      directories.append(line)
     elif line[:3] == 'f: ' :
       line = line.rstrip('\n').replace(line[:3], '')
-      files.append(line.rstrip('\n'))
+      files.append(line)
 
   dep.close()
 
