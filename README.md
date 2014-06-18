@@ -13,8 +13,10 @@ Create a new dir somewhere and initialize a git repo.
 Add some files and directories for testing purposes.
 
 Create a file named ".deprecate" in the root of the repository.
-Add file names like so **"f: path/from/root/to/filename.exp"**
-Add directories like so **"d: path/to/dir"**
+Add file names like so 
+**"f: path/from/root/to/filename.exp"**
+Add directories like so 
+**"d: path/to/dir"**
 
 Copy the executable into your **.git/hooks** dir and rename it **"pre-commit"**
 
