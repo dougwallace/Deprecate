@@ -6,21 +6,18 @@ Sometimes we are stuck with legacy code or technical debt. As a newcomer to a la
 
 This script is meant to be used as a git pre-commit hook to warn developers of deprecated code before committing.
 
-### To test it out.
+### Try it out
 
-Create a new dir somewhere and initialize a git repo.
+1. Create a new dir somewhere and initialize a git repo.
 
-Add some files and directories for testing purposes.
+2. Add some files and directories for testing purposes.
 
-Create a file named ".deprecate" in the root of the repository.
-Add file names like so 
+3. Create a file named ".deprecate" in the root of the repository.
 
-**"f: path/from/root/to/filename.exp"**
+  - Add file names like so **"f: path/from/root/to/filename.exp"**
 
 
-Add directories like so 
-
-**"d: path/to/dir"**
+  - Add directories like so **"d: path/to/dir"**
 
 Copy the executable into your **.git/hooks** dir and rename it **"pre-commit"**
 
