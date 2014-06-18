@@ -1,0 +1,55 @@
+#!/usr/bin/python
+import subprocess
+import os
+import sys
+
+def git(*args):
+  return subprocess.check_output(['git'] + list(args))
+
+if os.path.isfile(".deprecate") :
+  dep = open('.deprecate', 'r')
+  #print dep.read()
+
+  #initiate lists to be used later
+  directories = list()
+  files = list()
+  warnings = list()
+
+  for line in dep :
+    if line[:3] == 'd: ' :
+      line = line.rstrip('\n').replace(line[:3], '')
+      directories.append(line.rstrip('\n'))
+    elif line[:3] == 'f: ' :
+      line = line.rstrip('\n').replace(line[:3], '')
+      files.append(line.rstrip('\n'))
+
+  dep.close()
+
+  out = git('diff', '--staged', '--name-only').rstrip('\n')
+
+  changes = out.split('\n')
+
+  for change in changes :
+    for directory in directories :
+      if change[:len(directory)] == directory :
+        warnings.append(change)
+    for file in files :
+      if change == file :
+        warnings.append(change)
+
+  print '\033[91m' + 'The following files are deprecated:' + '\033[0m'
+
+  warningMessage = "";
+
+  if len(warnings) > 0 :
+    for warning in warnings :
+      warningMessage += warning + '\n'
+
+  print '\033[93m' + warningMessage + '\033[0m'
+
+  accept = raw_input('You are about to commit changes to deprecated files. \nDo you wish to continue? (y/n) ')
+
+  if accept == 'y' :
+    sys.exit(0)
+  else :
+    sys.exit(1)
