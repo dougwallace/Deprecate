@@ -19,12 +19,11 @@ This script is meant to be used as a git pre-commit hook to warn developers of d
 
   - Add directories like so **"d: path/to/dir"**
 
-Copy the executable into your **.git/hooks** dir and rename it **"pre-commit"**
+4. Copy the executable into your **.git/hooks** dir and rename it **"pre-commit"**
 
-Use git add to add some deprecated files to your staging area.
-Try to commit
+5. Use git add to add some deprecated files to your staging area. Try to commit
 
-Try unstaging those files and use git add to add files or directories not on the list and try to commit.
+6. Try unstaging those files and use git add to add files or directories not on the list and try to commit.
 
 ### Improvements: 
 I'd like to work on creating a deprecate command that you can run within a directory to add files or directories to the .deprecate file's list.
