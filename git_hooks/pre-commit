@@ -39,8 +39,6 @@ if os.path.isfile(".deprecate") :
       if change == file :
         warnings.append(change)
 
-
-
   warningMessage = "";
 
   if len(warnings) > 0 :
