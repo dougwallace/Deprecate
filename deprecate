@@ -7,42 +7,89 @@ import traceback
 def _git(*args):
   return subprocess.Popen(['git']+list(args), stdout=subprocess.PIPE).communicate()[0]
 
+def _createFileList(dep, curDir):
+  listOfFiles = []
+  files = ''
+
+  for line in dep:
+    if line[:3] == 'd: ':
+      dirPath = os.path.join(topLevel, line[3:])
+      if dirPath.rstrip() == curDir:
+        #current directory matches a dir in the .deprecate list
+        files = [f for f in os.listdir('.') if os.path.isfile(f)]
+        for f in files:
+          print f
+          listOfFiles.append(f)
+    elif line[:3] == 'f: ':
+      filePath = os.path.join(topLevel, line[3:])
+      splitPath = os.path.join(topLevel, line[3:]).split('/')
+      fileName = splitPath[-1].rstrip()
+
+      if os.path.exists(fileName):
+        absPath = os.path.abspath(fileName)
+        if absPath.rstrip() == filePath.rstrip():
+          listOfFiles.append(fileName)
+
+  if len(listOfFiles):
+
+    files = ''
+    for file in listOfFiles:
+      files = files+'\t'+file+'\n'
+
+  return files
+
+def _color(color, str):
+  colors = {
+    'blue' : '\033[94m',
+    'green' : '\033[92m',
+    'yellow' : '\033[93m',
+    'red' : '\033[91m'
+  }
+
+  end = '\033[0m'
+
+  newStr = colors[color] + str + end
+  return newStr
+
 #get top level of the repository
 topLevel = _git('rev-parse', '--show-toplevel')
+topLevel = topLevel.rstrip()
 
 def depHelp():
-  print "Usage: deprecate [OPTION] [VALUE] \n"
-  print "deprecate is a utility that marks files within a git repository as deprecated."
-  print "It can add/remove files to a .deprecate file in the root of a repository."
-  print "You can also add brief descriptions and information attached to these files.\n\n"
-  print "--help: Displays available arguments and information."
+  print _color('green', 'Usage: deprecate [OPTION] [VALUE] \n')
+  print 'deprecate is a utility that marks files within a git repository as deprecated.'
+  print 'It can add/remove files to a .deprecate file in the root of a repository.'
+  print 'You can also add brief descriptions and information attached to these files.\n\n'
+  print _color('green', 'help: ') + '\tDisplays available arguments and information.\n'
+  print _color('green', 'show: ') + '\tDisplay all of the files in the current directory that are deprecated.\n \tIf the command is run within the root directory of the repository \n \tthe entire list of files and directories will be output.\n'
 
 def depShow():
   curDir = os.getcwd()
+  curDir = curDir.rstrip()
   relPath = os.path.relpath(os.getcwd(), topLevel)
-
 
   #find and open .deprecate file
   pathToDep = os.path.join(topLevel.strip('\n'), '.deprecate')
   if os.path.isfile(pathToDep) :
     dep = open(pathToDep, 'r')
-    for line in dep:
-      if line[:3] == 'd: ':
-        print 'directory: '+line
-        lineLen = len(line[3:])
-        print 'relPath '+relPath
-        print 'relPath[:lineLen] '+relPath[:lineLen]
-        print 'line[3:] '+line[3:]
-        if relPath[:lineLen] == line[3:]:
-          print 'match'
-      elif line[:3] == 'f: ':
-        print 'file: '+line
+    files = ''
+
+    if curDir == topLevel:
+      files = ''
+      for line in dep:
+        files = files+'\t'+line[3:]
+    else:
+      files = _createFileList(dep,curDir)
+
+    if files != '':
+      print _color('red','The following files/directories are deprecated:')
+      print _color('yellow', files)
 
     dep.close()
 
 methods = {
-  "help" : depHelp,
-  "show" : depShow
+  'help' : depHelp,
+  'show' : depShow
 }
 
 method = sys.argv[1]
